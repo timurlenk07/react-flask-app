@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react';
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import logo from './logo.svg';
 import './App.css';
+import Register from "./userHandling/Register";
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
@@ -16,21 +18,33 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <p>The current time is {Math.round(currentTime)}.</p>
-      </header>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <header className="App-header">
+              <img src={logo} className="App-logo" alt="logo" />
+              <p>
+                Edit <code>src/App.js</code> and save to reload.
+              </p>
+              <a
+                className="App-link"
+                href="https://reactjs.org"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn React
+              </a>
+              <p>The current time is {Math.round(currentTime)}.</p>
+            </header>
+          </Route>
+          <Route exact path="/register">
+            <Register/>
+          </Route>
+          {/*<Route path="/admin">
+
+          </Route>*/}
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
