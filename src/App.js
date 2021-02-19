@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import logo from './logo.svg';
+import "bootswatch/dist/cerulean/bootstrap.min.css";
 import './App.css';
 import Register from "./userHandling/Register";
 
