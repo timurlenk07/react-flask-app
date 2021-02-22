@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import "bootswatch/dist/cerulean/bootstrap.min.css";
 import './App.css';
 import Register from "./userHandling/Register";
+import Login from "./userHandling/Login";
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
@@ -41,9 +42,9 @@ function App() {
           <Route exact path="/register">
             <Register/>
           </Route>
-          {/*<Route path="/admin">
-
-          </Route>*/}
+          <Route path="/admin">
+            <Login/>
+          </Route>
         </Switch>
       </BrowserRouter>
     </div>
