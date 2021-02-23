@@ -1,2 +1,2 @@
-FLASK_APP=app.py
+FLASK_APP=flasKingBackend
 FLASK_ENV=development
