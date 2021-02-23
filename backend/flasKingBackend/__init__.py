@@ -15,13 +15,14 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.from_mapping(test_config)
 
+    # TODO: delete later
     from . import demos
     app.register_blueprint(demos.bp)
 
+    from . import db
+    db.init_app(app)
+
     from . import register
     app.register_blueprint(register.bp)
-
-    # from . import db
-    # db.init_app(app)
 
     return app
