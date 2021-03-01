@@ -8,9 +8,9 @@ function range(start, end) {
   return Array.from({length: end - start + 1}, (_, i) => i + start)
 }
 
-function ReadPrivacyStatement(props) {
+function ReadPrivacyStatement() {
   return (
-    <div>
+    <>
       Elolvastam és elfogadom az{' '}
       <Link to="/docs/privacy_policy">Adatkezelési tájékoztatót</Link>
       {' '}és a{' '}
@@ -18,7 +18,7 @@ function ReadPrivacyStatement(props) {
       , valamint az{' '}
       <Link to="/docs/privacy_policy">Általános szerződési feltételeket</Link>
       .
-    </div>
+    </>
   )
 }
 
@@ -29,20 +29,24 @@ const schema = yup.object().shape({
   address: yup.string().required(),
   phone: yup.number().required(),
   password: yup.string().required(),
-  birthDate: yup.date().required(),
-  terms: yup.bool().required().oneOf([true], 'Terms must be accepted'),
+  birthYear: yup.number().required().min(1900).max(2021),
+  birthMonth: yup.number().required().min(1).max(12),
+  birthDay: yup.number().required().min(1).max(31),
+  terms: yup.bool().required().oneOf([true], 'A regisztrációhoz el kell fogadnia a feltételeket.'),
 });
 
 export function RegisterForm({handleRegister}) {
   const formik = useFormik({
     initialValues: {
-      registrationType: [],
+      registrationType: 12,
       fullName: '',
       email: '',
       address: '',
       phone: '',
       password: '',
-      birthDate: new Date(2001, 1, 1),
+      birthYear: 2000,
+      birthMonth: 1,
+      birthDay: 1,
       terms: false,
     },
     validationSchema: schema,
@@ -56,10 +60,12 @@ export function RegisterForm({handleRegister}) {
         <Form.Check
           inline label="magánszemély" value="magánszemély" type='radio' name="registrationType"
           checked={formik.values.registrationType === "magánszemély"} onChange={formik.handleChange}
+          isInvalid={!!formik.errors.registrationType}
         />
         <Form.Check
           inline label="cég" value="cég" type='radio' name="registrationType"
           checked={formik.values.registrationType === "cég"} onChange={formik.handleChange}
+          isInvalid={!!formik.errors.registrationType}
         />
       </Form.Group>
       <Form.Group>
@@ -132,7 +138,9 @@ export function RegisterForm({handleRegister}) {
         <Form.Row>
           <Col>
             <Form.Label>Év</Form.Label>
-            <Form.Control as="select">
+            <Form.Control as="select"
+                          name="birthYear" value={formik.values.birthYear}
+                          onChange={formik.handleChange} isInvalid={!!formik.errors.birthYear}>
               {range(1900, 2021).reverse().map((i) => {
                 return (<option key={i}>{i}</option>);
               })}
@@ -140,7 +148,9 @@ export function RegisterForm({handleRegister}) {
           </Col>
           <Col>
             <Form.Label>Hó</Form.Label>
-            <Form.Control as="select">
+            <Form.Control as="select"
+                          name="birthMonth" value={formik.values.birthMonth}
+                          onChange={formik.handleChange} isInvalid={!!formik.errors.birthMonth}>
               {range(1, 12).map((i) => {
                 return (<option key={i}>{i}</option>);
               })}
@@ -148,7 +158,9 @@ export function RegisterForm({handleRegister}) {
           </Col>
           <Col>
             <Form.Label>Nap</Form.Label>
-            <Form.Control as="select">
+            <Form.Control as="select"
+                          name="birthDay" value={formik.values.birthDay}
+                          onChange={formik.handleChange} isInvalid={!!formik.errors.birthDay}>
               {range(1, 31).map((i) => {
                 return (<option key={i}>{i}</option>);
               })}
@@ -157,10 +169,13 @@ export function RegisterForm({handleRegister}) {
         </Form.Row>
       </Form.Group>
       <Form.Group>
-        <Form.Check
-          inline label={<ReadPrivacyStatement/>} type='checkbox' name="terms"
-          checked={formik.values.terms} onChange={formik.handleChange}
-        />
+        <Form.Check>
+          <Form.Check.Input type='checkbox' name="terms"
+                            checked={formik.values.terms} onChange={formik.handleChange}
+                            isInvalid={!!formik.errors.terms}/>
+          <Form.Check.Label><ReadPrivacyStatement/></Form.Check.Label>
+          <Form.Control.Feedback type="invalid">{formik.errors.terms}</Form.Control.Feedback>
+        </Form.Check>
       </Form.Group>
       <Button variant="primary" type="submit">
         Regisztráció
