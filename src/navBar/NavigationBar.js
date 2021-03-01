@@ -12,9 +12,9 @@ export default function NavigationBar(props) {
     <Navbar bg="primary" variant="dark">
       <Navbar.Brand href="#home">Demo App</Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link href="/">Demo</Nav.Link>
+        <Nav.Link href="/demo">Demo</Nav.Link>
         <Nav.Link href="/register">Regisztráció</Nav.Link>
-        <Nav.Link href="/admin/login">Admin oldal</Nav.Link>
+        <Nav.Link href="/admin">Admin oldal</Nav.Link>
       </Nav>
       <Nav className="ml-auto">
         {logged ?
