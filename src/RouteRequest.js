@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Register from "./userHandling/Register";
-import Login from "./userHandling/Login";
 import {DemoView} from "./demo/DemoView";
+import AdminRouter from "./adminComponents/AdminRouter";
 
 
 export default function RouteRequest(props) {
@@ -15,7 +15,7 @@ export default function RouteRequest(props) {
           <Register/>
         </Route>
         <Route path="/admin">
-          <Login/>
+          <AdminRouter/>
         </Route>
       </Switch>
     </BrowserRouter>

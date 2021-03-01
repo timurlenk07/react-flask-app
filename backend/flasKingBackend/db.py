@@ -4,15 +4,19 @@ from flask import current_app, g
 from pymongo import MongoClient
 
 
-def get_db_client(default_db_name: str = 'db'):
+def get_db(default_db_name: str = 'db'):
+    return MongoClient("mongodb+srv://" +
+                       quote(current_app.config['DB_USER']) +
+                       ":" +
+                       quote(current_app.config['DB_PASSWORD']) +
+                       "@cluster0.1plba.mongodb.net/" +
+                       quote(default_db_name) +
+                       "?retryWrites=true&w=majority")
+
+
+def get_db_client():
     if 'client' not in g:
-        g.client = MongoClient("mongodb+srv://" +
-                               quote(current_app.config['DB_USER']) +
-                               ":" +
-                               quote(current_app.config['DB_PASSWORD']) +
-                               "@cluster0.1plba.mongodb.net/" +
-                               quote(default_db_name) +
-                               "?retryWrites=true&w=majority")
+        g.client = get_db()
 
     return g.client
 
