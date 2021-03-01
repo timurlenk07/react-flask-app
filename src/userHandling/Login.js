@@ -2,7 +2,6 @@ import {Button, Container, Form} from "react-bootstrap";
 import * as yup from "yup";
 import {useFormik} from "formik";
 import {login} from "../auth";
-import {useHistory} from "react-router";
 
 
 const schema = yup.object().shape({
@@ -11,7 +10,6 @@ const schema = yup.object().shape({
 });
 
 function LoginForm(props) {
-  const history = useHistory()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -28,7 +26,6 @@ function LoginForm(props) {
           if (token.access_token) {
             login(token)
             console.log(token)
-            history.push("/admin/home")
           } else {
             console.log("Please type in correct username/password")
           }

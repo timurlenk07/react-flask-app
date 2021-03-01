@@ -15,7 +15,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
 
 
 export default function AdminRouter(props) {
-  const logged = useAuth()
+  const [logged] = useAuth()
   return (
     <BrowserRouter>
       <Switch>
