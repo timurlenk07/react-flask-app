@@ -28,9 +28,9 @@ export default function Register(props) {
 
 
   return (
-    <Container className="w-25 justify-content-center" fluid>
+    <Container className="w-25 mt-3 mb-3 justify-content-center" fluid>
       <h1>Regisztrációs űrlap</h1>
-      Kérem töltse ki az alábbi mezőket.
+      <p>Kérem töltse ki az alábbi mezőket.</p>
       <RegisterForm handleRegister={handleRegister}/>
     </Container>
   )
