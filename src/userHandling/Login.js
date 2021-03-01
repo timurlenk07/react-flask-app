@@ -1,7 +1,9 @@
-import {Button, Container, Form} from "react-bootstrap";
+import {Alert, Button, Container, Form} from "react-bootstrap";
 import * as yup from "yup";
 import {useFormik} from "formik";
 import {login} from "../auth";
+import {useState} from "react";
+import PropTypes from "prop-types";
 
 
 const schema = yup.object().shape({
@@ -9,28 +11,16 @@ const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-function LoginForm(props) {
+LoginForm.propTypes = {handleLogin: PropTypes.func}
+
+function LoginForm({handleLogin}) {
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: schema,
-    onSubmit: (values) => {
-      console.log(values)
-      fetch('/admin/login', {
-        method: 'post',
-        body: JSON.stringify(values)
-      }).then(r => r.json())
-        .then(token => {
-          if (token.access_token) {
-            login(token)
-            console.log(token)
-          } else {
-            console.log("Please type in correct username/password")
-          }
-        })
-    }
+    onSubmit: handleLogin
   })
 
   return (
@@ -54,12 +44,31 @@ function LoginForm(props) {
   )
 }
 
-export default function Login(props) {
+
+export default function Login() {
+  const [errMsg, setErrMsg] = useState(null)
+
+  const handleLogin = credentials => {
+    fetch('/admin/login', {
+      method: 'post',
+      body: JSON.stringify(credentials)
+    }).then(r => r.json())
+      .then(token => {
+        if (token.access_token) {
+          login(token)
+        } else {
+          setErrMsg(token.message)
+        }
+      })
+  }
+
+
   return (
     <Container className="w-25 justify-content-center" fluid>
       <h1>Belépés</h1>
       Adja meg a felhasználónevét és jelszavát a bejelentkezéshez.
-      <LoginForm/>
+      {errMsg && <Alert variant="danger">{errMsg}</Alert>}
+      <LoginForm handleLogin={handleLogin}/>
     </Container>
   )
 }
