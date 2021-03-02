@@ -27,7 +27,10 @@ def refresh():
     return ret, 200
 
 
-@bp.route('/api/testAuthorization')
+@bp.route('/api/whoAmI')
 @flask_praetorian.auth_required
 def protected():
-    return {"message": f'protected endpoint (allowed user {flask_praetorian.current_user().properties["email"]})'}
+    return {
+        "email": flask_praetorian.current_user().properties["email"],
+        "roles": flask_praetorian.current_user().rolenames
+    }
