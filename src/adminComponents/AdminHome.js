@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import {authFetch} from "../auth";
+import {Container} from "react-bootstrap";
+import {PermissionsTable} from "./PermissionsTable";
 
 export default function AdminHome(props) {
   const [msg, setMsg] = useState('No data')
@@ -13,13 +15,12 @@ export default function AdminHome(props) {
   })
 
   return (
-    <div>
-      <h1>
-        Üdv az Admin otthonában!
-      </h1>
+    <Container className="mt-3 justify-content-start">
+      <h1>Üdv az Admin otthonában!</h1>
       <p>
         Az üzenet: {msg}
       </p>
-    </div>
+      <PermissionsTable/>
+    </Container>
   )
 }
