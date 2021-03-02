@@ -39,7 +39,7 @@ export default function Register(props) {
 
 
   return (
-    <Container className="w-25 mt-3 mb-3 justify-content-center" fluid>
+    <Container className="w-50 mt-3 mb-3 justify-content-center" fluid>
       {errMsg && <Alert variant="danger">{errMsg}</Alert>}
       {showSuccess && <Alert variant="success">Sikeres regisztráció!</Alert>}
       <h1>Regisztrációs űrlap</h1>

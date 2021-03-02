@@ -1,7 +1,8 @@
+import re
 from datetime import datetime
 
 from flask import Blueprint, request
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields, validate, validates, ValidationError
 from pymongo.errors import WriteError
 from webargs.flaskparser import use_kwargs
 
@@ -17,11 +18,22 @@ class CreateRegistrationSchema(Schema):
     email = fields.String(required=True, validate=validate.Email())
     address = fields.String(required=True)
     phone = fields.Number(required=True)
-    password = fields.String(required=True, validate=validate.Length(min=8))
+    password = fields.String(required=True)
     birthYear = fields.Number(required=True)
     birthMonth = fields.Number(required=True)
     birthDay = fields.Number(required=True)
     terms = fields.Boolean(required=True, validate=validate.Equal(True))
+
+    @validates("password")
+    def validate_password_strength(self, psw: str):
+        if len(psw) < 8:
+            raise ValidationError("Password must contain at least 8 characters")
+        if psw == psw.lower():
+            raise ValidationError("Password must contain uppercase letter")
+        if psw == psw.upper():
+            raise ValidationError("Password must contain lowercase letter")
+        if re.search(r'\d', psw) is None:
+            raise ValidationError("Password must contain number")
 
 
 # TODO: DEBUG only

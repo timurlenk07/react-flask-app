@@ -1,5 +1,5 @@
 import {useFormik} from "formik";
-import {Button, Col, Form, InputGroup} from "react-bootstrap";
+import {Button, Col, Form, InputGroup, Row} from "react-bootstrap";
 import * as yup from "yup";
 import {Link} from "react-router-dom";
 
@@ -28,7 +28,11 @@ const schema = yup.object().shape({
   email: yup.string().email().required(),
   address: yup.string().required(),
   phone: yup.number().required(),
-  password: yup.string().required(),
+  password: yup.string().ensure().min(8).required(
+  ).test('hasLowercase', 'A jelszónak tartalmaznia kell kisbetűt', text => text !== text.toUpperCase()
+  ).test('hasUppercase', 'A jelszónak tartalmaznia kell nagybetűt', text => text !== text.toLowerCase()
+  ).test('hasLowercase', 'A jelszónak tartalmaznia kell számot', text => /[0-9]/.test(text)
+  ),
   birthYear: yup.number().required().min(1900).max(2021),
   birthMonth: yup.number().required().min(1).max(12),
   birthDay: yup.number().required().min(1).max(31),
@@ -44,9 +48,9 @@ export function RegisterForm({handleRegister}) {
       address: '',
       phone: '',
       password: '',
-      birthYear: 2000,
-      birthMonth: 1,
-      birthDay: 1,
+      birthYear: 0,
+      birthMonth: 0,
+      birthDay: 0,
       terms: false,
     },
     validationSchema: schema,
@@ -56,7 +60,7 @@ export function RegisterForm({handleRegister}) {
 
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
-      <Form.Group>
+      <Form.Group as={Form.Row} className="justify-content-center">
         <Form.Check
           inline label="magánszemély" value="magánszemély" type='radio' name="registrationType"
           checked={formik.values.registrationType === "magánszemély"} onChange={formik.handleChange}
@@ -68,7 +72,7 @@ export function RegisterForm({handleRegister}) {
           isInvalid={!!formik.errors.registrationType}
         />
       </Form.Group>
-      <Form.Group>
+      <Form.Group as={Form.Row}>
         <Form.Control
           type="text"
           placeholder="Teljes név"
@@ -81,7 +85,7 @@ export function RegisterForm({handleRegister}) {
         {/*<Form.Control.Feedback>Nice name!</Form.Control.Feedback>*/}
         <Form.Control.Feedback type="invalid">{formik.errors.fullName}</Form.Control.Feedback>
       </Form.Group>
-      <Form.Group>
+      <Form.Group as={Form.Row}>
         <Form.Control
           type="email"
           placeholder="Email cím"
@@ -93,7 +97,7 @@ export function RegisterForm({handleRegister}) {
         {/*<Form.Control.Feedback>Valid email!</Form.Control.Feedback>*/}
         <Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
       </Form.Group>
-      <Form.Group>
+      <Form.Group as={Form.Row}>
         <Form.Control
           type="text"
           placeholder="Cím"
@@ -103,7 +107,7 @@ export function RegisterForm({handleRegister}) {
           isInvalid={!!formik.errors.address}
         />
       </Form.Group>
-      <Form.Group>
+      <Form.Group as={Form.Row}>
         <Form.Label>Telefonszám</Form.Label>
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
@@ -122,51 +126,68 @@ export function RegisterForm({handleRegister}) {
           <Form.Control.Feedback type="invalid">{formik.errors.phone}</Form.Control.Feedback>
         </InputGroup>
       </Form.Group>
-      <Form.Group>
-        <Form.Control
-          type="password"
-          placeholder="Jelszó"
-          name="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          isInvalid={!!formik.errors.password}
-        />
-        <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Születési idő</Form.Label>
-        <Form.Row>
-          <Col>
-            <Form.Label>Év</Form.Label>
-            <Form.Control as="select"
-                          name="birthYear" value={formik.values.birthYear}
-                          onChange={formik.handleChange} isInvalid={!!formik.errors.birthYear}>
-              {range(1900, 2021).reverse().map((i) => {
-                return (<option key={i}>{i}</option>);
-              })}
-            </Form.Control>
-          </Col>
-          <Col>
-            <Form.Label>Hó</Form.Label>
-            <Form.Control as="select"
-                          name="birthMonth" value={formik.values.birthMonth}
-                          onChange={formik.handleChange} isInvalid={!!formik.errors.birthMonth}>
-              {range(1, 12).map((i) => {
-                return (<option key={i}>{i}</option>);
-              })}
-            </Form.Control>
-          </Col>
-          <Col>
-            <Form.Label>Nap</Form.Label>
-            <Form.Control as="select"
-                          name="birthDay" value={formik.values.birthDay}
-                          onChange={formik.handleChange} isInvalid={!!formik.errors.birthDay}>
-              {range(1, 31).map((i) => {
-                return (<option key={i}>{i}</option>);
-              })}
-            </Form.Control>
-          </Col>
-        </Form.Row>
+      <Row className="mb-2 align-items-center">
+        <Form.Group as={Col} className="justify-content-start">
+          <Form.Row><Form.Label>Jelszó</Form.Label></Form.Row>
+          <Form.Control
+            type="password"
+            placeholder="Jelszó"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            isInvalid={!!formik.errors.password}
+          />
+          <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
+        </Form.Group>
+        <Col>
+          <Row><small className="text-danger text-uppercase">A jelszónak tartalmaznia kell:</small></Row>
+          <Row>
+            <Col className="justify-content-start">
+              <Row className="text-nowrap">- 8 karakter</Row>
+              <Row className="text-nowrap">- 1 nagybetű</Row>
+            </Col>
+            <Col className="justify-content-start">
+              <Row className="text-nowrap">- 1 kisbetű</Row>
+              <Row className="text-nowrap">- 1 szám</Row>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Form.Row><Form.Label>Születési idő</Form.Label></Form.Row>
+      <Form.Group as={Row}>
+        <Col>
+          <Form.Control as="select"
+                        name="birthYear" value={formik.values.birthYear}
+                        onChange={formik.handleChange} isInvalid={!!formik.errors.birthYear}>
+            <option disabled key={0} value={0}>Év</option>
+            )
+            {range(1900, 2021).reverse().map((i) => {
+              return (<option key={i} value={i}>{i}</option>);
+            })}
+          </Form.Control>
+        </Col>
+        <Col>
+          <Form.Control as="select"
+                        name="birthMonth" value={formik.values.birthMonth}
+                        onChange={formik.handleChange} isInvalid={!!formik.errors.birthMonth}>
+            <option disabled key={0} value={0}>Hónap</option>
+            )
+            {range(1, 12).map((i) => {
+              return (<option key={i} value={i}>{i}</option>);
+            })}
+          </Form.Control>
+        </Col>
+        <Col>
+          <Form.Control as="select"
+                        name="birthDay" value={formik.values.birthDay}
+                        onChange={formik.handleChange} isInvalid={!!formik.errors.birthDay}>
+            <option disabled key={0} value={0}>Nap</option>
+            )
+            {range(1, 31).map((i) => {
+              return (<option key={i} value={i}>{i}</option>);
+            })}
+          </Form.Control>
+        </Col>
       </Form.Group>
       <Form.Group>
         <Form.Check>
