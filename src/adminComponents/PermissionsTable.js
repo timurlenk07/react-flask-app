@@ -1,11 +1,13 @@
 import {Button, Table} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 
 
-PermissionsTable.propTypes = {elements: PropTypes.arrayOf(PropTypes.object)}
+PermissionsTable.propTypes = {
+  elements: PropTypes.arrayOf(PropTypes.object),
+  showDetailsView: PropTypes.func
+}
 
-export function PermissionsTable({elements}) {
+export function PermissionsTable({elements, showDetailsView, showDeleteView}) {
   return (
     <Table striped hover borderless>
       <thead className="thead-light">
@@ -23,13 +25,16 @@ export function PermissionsTable({elements}) {
           <td className="align-middle">{email}</td>
           <td className="align-middle">{roles}</td>
           <td className="pr-0 align-middle text-right">
-            <Link to="">Szerkesztés</Link>
+            <Button variant="link" onClick={showDetailsView}>Szerkesztés</Button>
           </td>
           <td className="align-middle text-left">
-            <Button variant="danger" className="text-uppercase font-weight-bold">Végleges törlés</Button></td>
+            <Button variant="danger" className="text-uppercase font-weight-bold" onClick={showDeleteView}>
+              Végleges törlés
+            </Button>
+          </td>
         </tr>
       ))}
       </tbody>
     </Table>
-  )
+  );
 }

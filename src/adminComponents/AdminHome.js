@@ -2,10 +2,15 @@ import {useEffect, useState} from "react";
 import {authFetch} from "../auth";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import {PermissionsTable} from "./PermissionsTable";
+import {DeleteUserWarning} from "./DeleteUserWarning";
+import {UserDetailsModal} from "./UserDetailsModal";
 
 
 export default function AdminHome() {
   const [elements, setElements] = useState([])
+  const [deleteWarningShow, setDeleteWarningShow] = useState(false);
+  const [userDetailsShow, setUserDetailsShow] = useState(false);
+
   useEffect(() => {
     authFetch('/admin/api/getAuthorizedUsers', {
       method: 'get'
@@ -20,10 +25,21 @@ export default function AdminHome() {
       <Row className="p-2">
         <Col className="text-left">
           <h1>Üdv az Admin otthonában!</h1>
-          <Button>Új jogosult hozzáadása</Button>
+          <Button onClick={() => setUserDetailsShow(true)}>Új jogosult hozzáadása</Button>
         </Col>
       </Row>
-      <Row className="p-2"><Col><PermissionsTable elements={elements}/></Col></Row>
+      <Row className="p-2">
+        <Col>
+          <PermissionsTable
+            elements={elements}
+            showDetailsView={() => setUserDetailsShow(true)}
+            showDeleteView={() => setDeleteWarningShow(true)}/>
+        </Col>
+      </Row>
+
+      <UserDetailsModal show={userDetailsShow}
+                        onHide={() => setUserDetailsShow(false)}/>
+      <DeleteUserWarning show={deleteWarningShow} onHide={() => setDeleteWarningShow(false)}/>
     </Container>
-  )
+  );
 }
