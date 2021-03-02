@@ -1,27 +1,30 @@
 import {useEffect, useState} from "react";
 import {authFetch} from "../auth";
-import {Container} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 import {PermissionsTable} from "./PermissionsTable";
 
-export default function AdminHome(props) {
-  const [msg, setMsg] = useState('No data')
+
+export default function AdminHome() {
+  const [elements, setElements] = useState([])
   useEffect(() => {
     authFetch('/admin/api/getAuthorizedUsers', {
       method: 'get'
     }).then(r => r.json())
       .then(r => {
-        console.log(r);
-        setMsg(JSON.stringify(r.admins[0]));
-      }, [])
-  })
+        setElements(r.admins);
+        console.log(elements);
+      })
+  }, [])
 
   return (
-    <Container className="mt-3 justify-content-start">
-      <h1>Üdv az Admin otthonában!</h1>
-      <p>
-        Az üzenet: {msg}
-      </p>
-      <PermissionsTable/>
+    <Container className="mt-3">
+      <Row className="p-2">
+        <Col className="text-left">
+          <h1>Üdv az Admin otthonában!</h1>
+          <Button>Új jogosult hozzáadása</Button>
+        </Col>
+      </Row>
+      <Row className="p-2"><Col><PermissionsTable elements={elements}/></Col></Row>
     </Container>
   )
 }

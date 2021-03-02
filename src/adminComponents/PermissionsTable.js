@@ -1,7 +1,11 @@
 import {Button, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
 
-export function PermissionsTable() {
+
+PermissionsTable.propTypes = {elements: PropTypes.arrayOf(PropTypes.object)}
+
+export function PermissionsTable(elements) {
   return (
     <Table striped hover borderless>
       <thead className="thead-light">
