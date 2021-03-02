@@ -6,11 +6,12 @@ import {PermissionsTable} from "./PermissionsTable";
 export default function AdminHome(props) {
   const [msg, setMsg] = useState('No data')
   useEffect(() => {
-    authFetch('/admin/home/data', {
+    authFetch('/admin/api/getAuthorizedUsers', {
       method: 'get'
     }).then(r => r.json())
       .then(r => {
-        setMsg(r.message);
+        console.log(r);
+        setMsg(JSON.stringify(r.admins[0]));
       }, [])
   })
 

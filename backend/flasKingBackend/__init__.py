@@ -29,4 +29,7 @@ def create_app(test_config=None):
     from . import register
     app.register_blueprint(register.bp)
 
+    from . import adminOps
+    app.register_blueprint(adminOps.bp)
+
     return app

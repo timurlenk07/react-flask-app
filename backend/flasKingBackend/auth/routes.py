@@ -27,7 +27,7 @@ def refresh():
     return ret, 200
 
 
-@bp.route('/home/data')
+@bp.route('/api/testAuthorization')
 @flask_praetorian.auth_required
 def protected():
-    return {"message": f'protected endspoint (allowed user {flask_praetorian.current_user().properties["email"]})'}
+    return {"message": f'protected endpoint (allowed user {flask_praetorian.current_user().properties["email"]})'}
