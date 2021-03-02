@@ -12,7 +12,6 @@ export default function AdminHome() {
     }).then(r => r.json())
       .then(r => {
         setElements(r.admins);
-        console.log(elements);
       })
   }, [])
 

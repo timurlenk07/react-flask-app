@@ -160,7 +160,6 @@ export function RegisterForm({handleRegister}) {
                         name="birthYear" value={formik.values.birthYear}
                         onChange={formik.handleChange} isInvalid={!!formik.errors.birthYear}>
             <option disabled key={0} value={0}>Év</option>
-            )
             {range(1900, 2021).reverse().map((i) => {
               return (<option key={i} value={i}>{i}</option>);
             })}
@@ -171,7 +170,6 @@ export function RegisterForm({handleRegister}) {
                         name="birthMonth" value={formik.values.birthMonth}
                         onChange={formik.handleChange} isInvalid={!!formik.errors.birthMonth}>
             <option disabled key={0} value={0}>Hónap</option>
-            )
             {range(1, 12).map((i) => {
               return (<option key={i} value={i}>{i}</option>);
             })}
@@ -182,7 +180,6 @@ export function RegisterForm({handleRegister}) {
                         name="birthDay" value={formik.values.birthDay}
                         onChange={formik.handleChange} isInvalid={!!formik.errors.birthDay}>
             <option disabled key={0} value={0}>Nap</option>
-            )
             {range(1, 31).map((i) => {
               return (<option key={i} value={i}>{i}</option>);
             })}
